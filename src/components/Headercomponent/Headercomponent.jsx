@@ -11,7 +11,7 @@ import Buttoninputsearch from '../Buttoninputsearch/Buttoninputsearch';
 const Headercomponent = () => {
     return (
         <div>
-            <WrapperHeader hutter={16}>
+            <WrapperHeader >
                 <Col span={6}>
                     <WrapperTextHeader> PHONGDEV</WrapperTextHeader>
                 </Col>

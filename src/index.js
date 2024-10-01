@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-//import 'antd/dist/antd.min.css';
+import 'antd/dist/reset.css';  // Import CSS của Ant Design
+import './index.css';
 
 
 import { Provider } from 'react-redux'

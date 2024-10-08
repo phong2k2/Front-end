@@ -7,9 +7,6 @@ import slider2 from '../../assets/images/slider2.webp'
 import slider3 from '../../assets/images/slider3.webp'
 import slider1 from '../../assets/images/slider1.webp'
 import Cardcomponent from '../../components/Cardcomponent/Cardcomponent'
-import Navbarcomponent from '../../components/Navbarcomponent/Navbarcomponent'
-import Buttoncomponent from '../../components/Buttoncomponent/Buttoncomponent'
-import { Color } from 'antd/es/color-picker'
 
 
 const HomePage = () => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from './style'
 import Inputform from '../../components/Inputform/Inputform'
 import Buttoncomponent from '../../components/Buttoncomponent/Buttoncomponent'
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import * as UserService from '../../services/Userservice'
 import { useMutationHooks } from '../../hooks/useMutationHook'
 import Loading from '../../components/Loadingcomponent/Loading'
-
+import * as message from '../../components/Message/Message'
 
 const Signuppge = () => {
     const navigate = useNavigate()
@@ -29,7 +29,16 @@ const Signuppge = () => {
         data => UserService.signupUser(data)
     )
 
-    const { data, isPending } = mutation
+    const { data, isPending, isSuccess, isError } = mutation
+
+    useEffect(() => {
+        if (isSuccess) {
+            message.success()
+            handleNavigateSignIn()
+        } else if (isError) {
+            message.error()
+        }
+    }, [isSuccess, isError])
 
     const handleOnchangePassword = (value) => {
         setPassword(value)

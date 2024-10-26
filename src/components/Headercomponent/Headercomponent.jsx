@@ -32,9 +32,10 @@ const Headercomponent = () => {
     const content = (
         <div>
             <WrapperContentPopup onClick={handleLogout}>Đăng xuất</WrapperContentPopup>
-            <WrapperContentPopup>Thông tin người dùng</WrapperContentPopup>
+            <WrapperContentPopup onClick={() => navigate('/profile-user')}>Thông tin người dùng</WrapperContentPopup>
         </div>
     );
+
     return (
         <div style={{ width: '100%', background: 'rgb(26, 148, 255)', display: 'flex', justifyContent: 'center' }}>
             <WrapperHeader >
@@ -54,10 +55,10 @@ const Headercomponent = () => {
                     <Loading isPending={loading}>
                         <WrapperHeaderAccount>
                             <UserOutlined style={{ fontSize: '30px' }} />
-                            {user?.name ? (
+                            {user?.access_token ? (
                                 <>
                                     <Popover content={content} trigger="click">
-                                        <div style={{ cursor: 'pointer' }}>{user.name}</div>
+                                        <div style={{ cursor: 'pointer' }}>{user?.name?.length ? user?.name : user?.email}</div>
                                     </Popover>
                                 </>
                             ) : (

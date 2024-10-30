@@ -14,7 +14,7 @@ import { resetUser } from '../../redux/slides/userSlide'
 import Loading from '../Loadingcomponent/Loading';
 
 
-const Headercomponent = () => {
+const Headercomponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     const navigate = useNavigate()
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()
@@ -41,26 +41,30 @@ const Headercomponent = () => {
 
     const content = (
         <div>
-            <WrapperContentPopup onClick={handleLogout}>Đăng xuất</WrapperContentPopup>
             <WrapperContentPopup onClick={() => navigate('/profile-user')}>Thông tin người dùng</WrapperContentPopup>
+            {user?.isAdmin && (
+                <WrapperContentPopup onClick={() => navigate('/system/admin')}>Quản lý hệ thống</WrapperContentPopup>
+            )}
+            <WrapperContentPopup onClick={handleLogout}>Đăng xuất</WrapperContentPopup>
         </div>
     );
 
     return (
         <div style={{ width: '100%', background: 'rgb(26, 148, 255)', display: 'flex', justifyContent: 'center' }}>
-            <WrapperHeader >
+            <WrapperHeader style={{ justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset' }}>
                 <Col span={5}>
                     <WrapperTextHeader> PHONGDEV</WrapperTextHeader>
                 </Col>
-                <Col span={13}>
-                    <Buttoninputsearch
-                        size="large"
-                        bordered={false}
-                        textButton="Tìm kiếm"
-                        placeholder="input search text"
-
-                    />
-                </Col>
+                {!isHiddenSearch && (
+                    <Col span={13}>
+                        <Buttoninputsearch
+                            size="large"
+                            bordered={false}
+                            textButton="Tìm kiếm"
+                            placeholder="input search text"
+                        />
+                    </Col>
+                )}
                 <Col span={6} style={{ display: 'flex', gap: '54px', alignItems: 'center' }}>
                     <Loading isPending={loading}>
                         <WrapperHeaderAccount>
@@ -77,7 +81,7 @@ const Headercomponent = () => {
 
                             {user?.access_token ? (
                                 <>
-                                    <Popover content={content} trigger="click">
+                                    <Popover content={content} trigger="click" >
                                         <div style={{ cursor: 'pointer' }}>{userName?.length ? userName : user?.email}</div>
                                     </Popover>
                                 </>
@@ -93,13 +97,14 @@ const Headercomponent = () => {
 
                         </WrapperHeaderAccount>
                     </Loading>
-                    <div>
-                        <Badge count={4} size="small">
-                            <ShoppingCartOutlined style={{ fontSize: '30px', color: '#fff' }} />
-                        </Badge>
-                        <WrapperTextHeaderSmall>Giỏ hàng </WrapperTextHeaderSmall>
-
-                    </div>
+                    {!isHiddenCart && (
+                        <div>
+                            <Badge count={4} size="small">
+                                <ShoppingCartOutlined style={{ fontSize: '30px', color: '#fff' }} />
+                            </Badge>
+                            <WrapperTextHeaderSmall>Giỏ hàng </WrapperTextHeaderSmall>
+                        </div>
+                    )}
                 </Col>
             </WrapperHeader>
         </div>

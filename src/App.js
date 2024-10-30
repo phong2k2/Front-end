@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import * as UserService from './services/Userservice'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from './redux/slides/userSlide'
-import axios from 'axios'
+//import axios from 'axios'
 import Loading from './components/Loadingcomponent/Loading'
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
     if (decoded?.id) {
       handleGetDetailsUser(decoded?.id, storageData)
     }
+    setIsPending(false)
   }, [])
 
   const handleDecoded = () => {
@@ -58,7 +59,7 @@ function App() {
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
-    setIsPending(false)
+
   };
 
   return (

@@ -1,50 +1,10 @@
-import { Divider, Radio, Table } from 'antd'
+import { Table } from 'antd'
 import React from 'react'
+import Loading from '../Loadingcomponent/Loading';
 
 const TableComponent = (props) => {
-    const { selectionType = 'checkbox' } = props
+    const { selectionType = 'checkbox', data = [], isPending = false, columns = [] } = props
 
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            render: (text) => <a>{text}</a>,
-        },
-        {
-            title: 'Age',
-            dataIndex: 'age',
-        },
-        {
-            title: 'Address',
-            dataIndex: 'address',
-        },
-    ];
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York',
-        },
-        {
-            key: '2',
-            name: 'John Brown',
-            age: 42,
-            address: 'New York',
-        },
-        {
-            key: '3',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York',
-        },
-        {
-            key: '4',
-            name: 'John Brown',
-            age: 99,
-            address: 'New York',
-        },
-    ];
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -52,17 +12,22 @@ const TableComponent = (props) => {
         },
         getCheckboxProps: (record) => ({
             disabled: record.name === 'Disabled User',
+
             name: record.name,
         }),
     };
     return (
-        <Table
-            rowSelection={{
-                type: selectionType,
-                ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={data} />
+        <Loading isPending={isPending}>
+            <Table
+                rowSelection={{
+                    type: selectionType,
+                    ...rowSelection,
+                }}
+                columns={columns}
+                dataSource={data}
+                {...props}
+            />
+        </Loading>
     )
 }
 

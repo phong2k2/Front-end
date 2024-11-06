@@ -1,23 +1,41 @@
 import { Table } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import Loading from '../Loadingcomponent/Loading';
 
-const TableComponent = (props) => {
-    const { selectionType = 'checkbox', data = [], isPending = false, columns = [] } = props
 
+const TableComponent = (props) => {
+    const { selectionType = 'checkbox', data = [], isPending = false, columns = [], handleDeleteMany } = props
+    const [rowSelectedKeys, setRowSelectedKeys] = useState([])
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys:${selectedRowKeys}`, 'selectedRows', selectedRows);
+            setRowSelectedKeys(selectedRowKeys)
         },
-        getCheckboxProps: (record) => ({
-            disabled: record.name === 'Disabled User',
-
-            name: record.name,
-        }),
+        // getCheckboxProps: (record) => ({
+        //     disabled: record.name === 'Disabled User',
+        //      name: record.name,
+        //}),
     };
+
+    const handleDeleteAll = () => {
+        handleDeleteMany(rowSelectedKeys)
+    }
+
     return (
         <Loading isPending={isPending}>
+            {rowSelectedKeys.length > 0 && (
+                <div style={{
+                    background: '#1d1ddd',
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    padding: '10px',
+                    cursor: 'pointer'
+                }}
+                    onClick={handleDeleteAll}
+                >
+                    Xóa Tất Cả
+                </div>
+            )}
             <Table
                 rowSelection={{
                     type: selectionType,

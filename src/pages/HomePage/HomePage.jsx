@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Typeproduct from '../../components/Typeproduct/Typeproduct'
 import { WrapperButtonMore, WrapperProducts, WrapperTypeProduct } from './style'
 import Slidercomponent from '../../components/Slidercomponent/Slidercomponent'
@@ -9,18 +9,52 @@ import slider1 from '../../assets/images/slider1.webp'
 import Cardcomponent from '../../components/Cardcomponent/Cardcomponent'
 import { useQuery } from '@tanstack/react-query'
 import *as ProductService from '../../services/ProductService'
+import { useSelector } from 'react-redux'
+import Loading from '../../components/Loadingcomponent/Loading'
+import { useDebounce } from '../../hooks/useDebounce'
 
 const HomePage = () => {
+    const searchProduct = useSelector((state) => state?.product?.search)
+    const searchDebounce = useDebounce(searchProduct, 500)
+    const refSearch = useRef()
+    const [loading, setLoading] = useState(false)
+    const [stateProducts, setStateProducts] = useState([])
     const arr = ['TV', 'Tủ Lạnh', 'Lap Top']
-    const fetchProductAll = async () => {
-        const res = await ProductService.getAllProduct()
-        console.log('res', res)
-        return res
+    const fetchProductAll = async (search) => {
+        // if(search.length>0){}
+        const res = await ProductService.getAllProduct(search)
+        if (search?.length > 0 || refSearch.current) {
+            setStateProducts(res?.data)
+        } else {
+            return res
+        }
     }
+
+    useEffect(() => {
+        if (refSearch.current) {
+            setLoading(true)
+            fetchProductAll(searchDebounce)
+        }
+        refSearch.current = true
+        setLoading(false)
+    }, [searchDebounce])
+
     const { isPending, data: products } = useQuery({ queryKey: ['products'], queryFn: fetchProductAll, retry: 3, retryDelay: 1000 });
-    console.log('data', products)
+
+    {/*useEffect(() => {
+        if (products ? data?.length > 0) {
+            setStateProducts(products?.data)
+        }
+    }, [products])*/}
+    useEffect(() => {
+        if (products && products.data?.length > 0) {
+            setStateProducts(products.data);
+        }
+    }, [products]);
+
+
     return (
-        <>
+        <Loading isPending={isPending || loading}>
             <div style={{ width: '1270px', margin: '0 auto' }}>
                 <WrapperTypeProduct>
                     {arr.map((item) => {
@@ -34,7 +68,8 @@ const HomePage = () => {
                 < div id="container" style={{ height: '1000px', width: '1270px', margin: '0 auto' }}>
                     <Slidercomponent arrImages={[slider4, slider1, slider2, slider3]} />
                     <WrapperProducts>
-                        {products?.data?.map((product) => {
+                        {stateProducts?.map((product) => {
+                            console.log('product', product)
                             return (
                                 <Cardcomponent
                                     key={product._id}
@@ -60,7 +95,7 @@ const HomePage = () => {
                     </div>
                 </div >
             </div >
-        </>
+        </Loading>
     )
 }
 

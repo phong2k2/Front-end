@@ -6,7 +6,7 @@ import imageLogo from '../../assets/images/logo-login.png'
 import { Image } from 'antd'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import * as UserService from '../../services/Userservice'
 import { useMutationHooks } from '../../hooks/useMutationHook'
 import Loading from '../../components/Loadingcomponent/Loading'
@@ -15,7 +15,8 @@ import { useDispatch } from 'react-redux'
 import { updateUser } from '../../redux/slides/userSlide'
 
 const Signinpage = () => {
-    const [isShowPassword, setisShowPassword] = useState(false)
+    const [isShowPassword, setIsShowPassword] = useState(false)
+    const location = useLocation()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
@@ -28,8 +29,13 @@ const Signinpage = () => {
     const { data, isPending, isSuccess } = mutation
 
     useEffect(() => {
+        console.log('location', location)
         if (isSuccess) {
-            navigate('/')
+            if (location?.state) {
+                navigate(location?.state)
+            } else {
+                navigate('/')
+            }
             localStorage.setItem('access_token', JSON.stringify(data?.access_token))
             if (data?.access_token) {
                 const decoded = jwtDecode(data?.access_token)
@@ -75,7 +81,7 @@ const Signinpage = () => {
                     <Inputform style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
                     <div style={{ position: 'relative' }}>
                         <span
-                            onClick={() => setisShowPassword(!isShowPassword)}
+                            onClick={() => setIsShowPassword(!isShowPassword)}
                             style={{
                                 zIndex: 10,
                                 position: 'absolute',

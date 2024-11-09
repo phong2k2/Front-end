@@ -7,11 +7,17 @@ import * as ProductService from '../../services/ProductService'
 import Buttoncomponent from '../Buttoncomponent/Buttoncomponent'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '../Loadingcomponent/Loading'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { addOrderProduct } from '../../redux/slides/orderSlide';
 
 const Productdetailscomponent = ({ idProduct }) => {
     const [numProduct, setNumProduct] = useState(1)
     const user = useSelector((state) => state.user)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const dispatch = useDispatch()
+
     const onChange = (value) => {
         setNumProduct(Number(value))
     }
@@ -24,6 +30,7 @@ const Productdetailscomponent = ({ idProduct }) => {
         }
     }
 
+
     const handleChangeCount = (type) => {
         if (type === 'increase') {
             setNumProduct(numProduct + 1)
@@ -31,10 +38,37 @@ const Productdetailscomponent = ({ idProduct }) => {
             setNumProduct(numProduct - 1)
         }
     }
-
     const { isPending, data: productDetails } = useQuery({ queryKey: ['product-details', idProduct], queryFn: fetchGetDetailsProduct, enabled: !!idProduct });
-    console.log('first')
 
+    const handleAddOrderProduct = () => {
+        if (!user?.id) {
+            navigate('/sign-in', { state: location?.pathname })
+        } else {
+            //   {
+            //      name: { type: String, required: true },
+            //       amount: { type: Number, required: true },
+            //       image: { type: String, required: true },
+            //      price: { type: Number, required: true },
+            //      product: {
+            //           type: mongoose.Schema.Types.ObjectId,
+            //          ref: 'Product',
+            //           required: true,
+            //      },
+            //  },
+            dispatch(addOrderProduct({
+                orderItem: {
+                    name: productDetails?.name,
+                    amount: numProduct,
+                    image: productDetails?.image,
+                    price: productDetails?.price,
+                    product: productDetails?._id
+                }
+            }))
+        }
+    }
+
+
+    console.log('productDetails', productDetails, user)
     return (
         <Loading isPending={isPending}>
             <Row style={{ padding: '16px', background: '#fff', borderRadius: '4px' }}>
@@ -95,6 +129,7 @@ const Productdetailscomponent = ({ idProduct }) => {
                                 height: '48px', width: '220px',
                                 border: 'none', borderRadius: '4px'
                             }}
+                            onClick={handleAddOrderProduct}
                             textButton={"Chọn mua"}
                             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
                         ></Buttoncomponent>

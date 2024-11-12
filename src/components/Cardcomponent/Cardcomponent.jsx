@@ -3,6 +3,7 @@ import { StyleNameProduct, WrapperCardStyle, WrapperDiscountText, WrapperPriceTe
 import { StarFilled } from '@ant-design/icons';
 import logo from '../../assets/images/logo.png'
 import { useNavigate } from 'react-router-dom';
+import { convertPrice } from '../../utils';
 
 const Cardcomponent = (props) => {
     const { countInStock, description, image, name, price, rating, type, discount, selled, id } = props
@@ -32,7 +33,7 @@ const Cardcomponent = (props) => {
                 <WrapperStyleTextSell> | Đã bán {selled || 1000}+</WrapperStyleTextSell>
             </WrapperReporText>
             <WrapperPriceText>
-                <span style={{ marginRight: '8px' }}>{price?.toLocaleString()}</span>
+                <span style={{ marginRight: '8px' }}>{convertPrice(price)}</span>
                 <WrapperDiscountText>
                     - {discount || 5}%
                 </WrapperDiscountText>

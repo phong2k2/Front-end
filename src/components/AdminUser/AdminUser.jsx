@@ -23,8 +23,6 @@ const AdminUser = () => {
     const [isPendingUpdate, setIsPendingUpdate] = useState(false)
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false)
     const user = useSelector((state) => state?.user)
-    //   const [searchText, setSearchText] = useState('');
-    //    const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
 
     const [stateUserDetails, setStateUserDetails] = useState({
@@ -84,7 +82,7 @@ const AdminUser = () => {
     )
 
     const getAllUsers = async () => {
-        const res = await UserService.getAllUser()
+        const res = await UserService.getAllUser(user?.access_token)
         console.log('res', res)
         return res
     }

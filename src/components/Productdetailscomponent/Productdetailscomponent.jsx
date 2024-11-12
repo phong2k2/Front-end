@@ -10,6 +10,7 @@ import Loading from '../Loadingcomponent/Loading'
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addOrderProduct } from '../../redux/slides/orderSlide';
+import { convertPrice } from '../../utils';
 
 const Productdetailscomponent = ({ idProduct }) => {
     const [numProduct, setNumProduct] = useState(1)
@@ -67,8 +68,6 @@ const Productdetailscomponent = ({ idProduct }) => {
         }
     }
 
-
-    console.log('productDetails', productDetails, user)
     return (
         <Loading isPending={isPending}>
             <Row style={{ padding: '16px', background: '#fff', borderRadius: '4px' }}>
@@ -102,7 +101,7 @@ const Productdetailscomponent = ({ idProduct }) => {
                         <WrapperStyleTextSell> | Đã bán 1000+</WrapperStyleTextSell>
                     </div>
                     <WrapperPriceProduct>
-                        <WrapperPriceTextProduct>{productDetails?.price}</WrapperPriceTextProduct>
+                        <WrapperPriceTextProduct>{convertPrice(productDetails?.price)}</WrapperPriceTextProduct>
                     </WrapperPriceProduct>
                     <WrapperAddressProduct>
                         <span>Giao đến</span>

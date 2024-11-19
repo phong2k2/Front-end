@@ -1,5 +1,5 @@
 import React from 'react'
-import { WrapperInfo, WrapperContainer, WrapperValue, WrapperItemOrder, WrapperPriceDiscount, WrapperCountOrder, WrapperItemOrderInfo } from './style';
+import { WrapperInfo, WrapperContainer, WrapperValue, WrapperItemOrder, WrapperItemOrderInfo } from './style';
 import { useSelector } from 'react-redux';
 import Loading from '../../components/Loadingcomponent/Loading';
 import { Label } from './style';

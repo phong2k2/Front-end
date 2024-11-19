@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleNameProduct, WrapperCardStyle, WrapperDiscountText, WrapperPriceText, WrapperReporText, WrapperStyleTextSell } from './style'
+import { StyleNameProduct, WrapperCardStyle, WrapperDiscountText, WrapperPriceText, WrapperReportText, WrapperStyleTextSell } from './style'
 import { StarFilled } from '@ant-design/icons';
 import logo from '../../assets/images/logo.png'
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,8 @@ const Cardcomponent = (props) => {
             hoverable
             style={{ width: 200, body: { padding: '20px' }, header: { width: '200px', height: '200px' } }}
             cover={<img alt="example" src={image} />}
-            onClick={() => handleDetailsProduct(id)}
+            onClick={() => countInStock !== 0 && handleDetailsProduct(id)}
+            disabled={countInStock === 0}
         >
             <img
                 src={logo}
@@ -26,12 +27,12 @@ const Cardcomponent = (props) => {
                 }}
             />
             <StyleNameProduct>{name}</StyleNameProduct>
-            <WrapperReporText>
+            <WrapperReportText>
                 <span style={{ marginRight: '4px' }}>
                     <span>{rating} </span><StarFilled style={{ fontSize: '12px', color: 'yellow' }} />
                 </span>
                 <WrapperStyleTextSell> | Đã bán {selled || 1000}+</WrapperStyleTextSell>
-            </WrapperReporText>
+            </WrapperReportText>
             <WrapperPriceText>
                 <span style={{ marginRight: '8px' }}>{convertPrice(price)}</span>
                 <WrapperDiscountText>

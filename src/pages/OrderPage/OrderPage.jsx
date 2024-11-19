@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { WrapperCountOrder, WrapperInfo, WrapperItemOrder, WrapperLeft, WrapperListOrder, WrapperPriceDiscount, WrapperRight, WrapperStyleHeader, WrapperTotal } from './style';
+import { WrapperCountOrder, WrapperInfo, WrapperItemOrder, WrapperLeft, WrapperListOrder, WrapperPriceDiscount, WrapperRight, WrapperStyleHeader, WrapperStyleHeaderDelivery, WrapperTotal } from './style';
 import { Checkbox, Form } from 'antd';
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { WrapperInputNumber, } from '../../components/Productdetailscomponent/style'
@@ -15,6 +15,7 @@ import Loading from '../../components/Loadingcomponent/Loading';
 import * as message from '../../components/Message/Message'
 import { updateUser } from '../../redux/slides/userSlide';
 import { useNavigate } from 'react-router-dom';
+import StepComponent from '../../components/StepComponent/StepComponent';
 
 
 const OrderPage = () => {
@@ -115,10 +116,10 @@ const OrderPage = () => {
         return 0
     }, [order])
 
-    const diliveryPriceMemo = useMemo(() => {
-        if (priceMemo > 200000) {
+    const deliveryPriceMemo = useMemo(() => {
+        if (priceMemo >= 200000 && priceMemo < 500000) {
             return 10000
-        } else if (priceMemo === 0) {
+        } else if (priceMemo >= 500000 || order?.orderItemSelected?.length === 0) {
             return 0
         } else {
             return 20000
@@ -126,8 +127,8 @@ const OrderPage = () => {
     }, [priceMemo])
 
     const totalPriceMemo = useMemo(() => {
-        return Number(priceMemo) - Number(priceDiscountMemo) + Number(diliveryPriceMemo)
-    }, [priceMemo, diliveryPriceMemo, priceDiscountMemo])
+        return Number(priceMemo) - Number(priceDiscountMemo) + Number(deliveryPriceMemo)
+    }, [priceMemo, deliveryPriceMemo, priceDiscountMemo])
 
     const handleRemoveAllOrder = () => {
         if (listChecked?.length > 1) {
@@ -191,6 +192,20 @@ const OrderPage = () => {
         })
     }
 
+    const itemsDelivery = [
+        {
+            title: '20.000 VND',
+            description: 'Dưới 200.000 VND',
+        },
+        {
+            title: '10.000 VND',
+            description: 'Từ 200.000 VND đến dưới 500.000 VND',
+        },
+        {
+            title: 'Free ship',
+            description: 'Trên 500.000 VND',
+        },
+    ]
 
     return (
         <div style={{ background: '#f5f5fa', width: '100%', height: '100vh' }}>
@@ -198,6 +213,11 @@ const OrderPage = () => {
                 <h3>Giỏ hàng</h3>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <WrapperLeft>
+                        <WrapperStyleHeaderDelivery>
+                            <StepComponent items={itemsDelivery} current={deliveryPriceMemo === 10000
+                                ? 2 : deliveryPriceMemo === 20000 ? 1
+                                    : order.orderItemSelected.length === 0 ? 0 : 3} />
+                        </WrapperStyleHeaderDelivery>
                         <WrapperStyleHeader>
                             <span style={{ display: 'inline-block', width: '390px' }}>
                                 <Checkbox onChange={handleOnChangeCheckAll} checked={listChecked?.length === order?.orderItems?.length}></Checkbox>
@@ -268,7 +288,7 @@ const OrderPage = () => {
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <span>Phí giao hàng</span>
-                                    <span style={{ color: '#000', fontSize: '14px', fontWeight: 'bold' }}>{convertPrice(diliveryPriceMemo)}</span>
+                                    <span style={{ color: '#000', fontSize: '14px', fontWeight: 'bold' }}>{convertPrice(deliveryPriceMemo)}</span>
                                 </div>
                             </WrapperInfo>
 

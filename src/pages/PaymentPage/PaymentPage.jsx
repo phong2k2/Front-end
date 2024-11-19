@@ -15,6 +15,7 @@ import * as message from '../../components/Message/Message'
 import { updateUser } from '../../redux/slides/userSlide';
 import { WrapperRadio } from './style';
 import { Label } from './style';
+import { useNavigate } from 'react-router-dom';
 
 
 const PaymentPage = () => {
@@ -23,6 +24,7 @@ const PaymentPage = () => {
 
     const [delivery, setDelivery] = useState('fast')
     const [payment, setPayment] = useState('later_money')
+    const navigate = useNavigate()
 
     const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false)
     const [stateUserDetails, setStateUserDetails] = useState({
@@ -129,11 +131,24 @@ const PaymentPage = () => {
 
 
     const { isPending, data } = mutationUpdate
-    const { data: dataAddOrder, isPending: isPendingAddOrder, isSuccess, isError } = mutationAddOrder
+    const { data: dataAdd, isPending: isPendingAddOrder, isSuccess, isError } = mutationAddOrder
 
     useEffect(() => {
-        if (isSuccess && dataAddOrder?.status === 'OK') {
+        if (isSuccess && dataAdd?.status === 'OK') {
+            const arrayOrdered = []
+            order?.orderItemSelected?.forEach(element => {
+                arrayOrdered.push(element.product)
+            });
+            dispatch(removeAllOrderProduct({ listChecked: arrayOrdered }))
             message.success('Đặt hàng thành công')
+            navigate('/orderSuccess', {
+                state: {
+                    delivery,
+                    payment,
+                    orders: order?.orderItemSelected,
+                    totalPriceMemo: totalPriceMemo
+                }
+            })
         } else if (isError) {
             message.error()
         }

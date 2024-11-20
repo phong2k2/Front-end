@@ -84,7 +84,7 @@ const PaymentPage = () => {
     }, [priceMemo])
 
     const totalPriceMemo = useMemo(() => {
-        return Number(priceMemo) - Number(priceDiscountMemo) + Number(deliveryPriceMemo)
+        return Number(priceMemo) - (Number(priceDiscountMemo) * Number(priceMemo)) / 100 + Number(deliveryPriceMemo)
     }, [priceMemo, deliveryPriceMemo, priceDiscountMemo])
 
     const handleAddOrder = () => {

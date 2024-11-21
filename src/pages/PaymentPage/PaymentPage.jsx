@@ -16,6 +16,8 @@ import { updateUser } from '../../redux/slides/userSlide';
 import { WrapperRadio } from './style';
 import { Label } from './style';
 import { useNavigate } from 'react-router-dom';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import * as PaymentService from '../../services/PaymentService'
 
 
 const PaymentPage = () => {
@@ -25,6 +27,7 @@ const PaymentPage = () => {
     const [delivery, setDelivery] = useState('fast')
     const [payment, setPayment] = useState('later_money')
     const navigate = useNavigate()
+    const [sdkReady, setSdkReady] = useState(false)
 
     const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false)
     const [stateUserDetails, setStateUserDetails] = useState({
@@ -166,6 +169,27 @@ const PaymentPage = () => {
         setIsOpenModalUpdateInfo(false)
     }
 
+    const onSuccessPaypal = (data, actions) => {
+        mutationAddOrder.mutate(
+            {
+                token: user?.access_token,
+                orderItems: order?.orderItemSelected,
+                fullName: user?.name,
+                address: user?.address,
+                phone: user?.phone,
+                city: user?.city,
+                paymentMethod: payment,
+                itemsPrice: priceMemo,
+                shippingPrice: deliveryPriceMemo,
+                totalPrice: totalPriceMemo,
+                user: user?.id,
+                isPaid: true,
+                paidAt: actions.update_time,
+                email: user?.email
+            }
+        )
+    };
+
     const handleUpdateInfoUser = () => {
         const { name, address, city, phone } = stateUserDetails
         if (name && address && city && phone) {
@@ -193,6 +217,26 @@ const PaymentPage = () => {
         setPayment(e.target.value)
     }
 
+    const addPaypalScript = async () => {
+        const { data } = await PaymentService.getConfig()
+        const script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+        script.async = true;
+        script.onload = () => {
+            setSdkReady(true)
+        }
+        document.body.appendChild(script)
+    }
+
+    useEffect(() => {
+        if (!window.paypal) {
+            addPaypalScript()
+        } else {
+            setSdkReady(true)
+        }
+    }, [])
+
 
     return (
         <div style={{ background: '#f5f5fa', width: '100%', height: '100vh' }}>
@@ -215,6 +259,7 @@ const PaymentPage = () => {
                                     <Label>Chọn phương thức thanh toán</Label>
                                     <WrapperRadio onChange={handlePayment} value={payment}>
                                         <Radio value="later_money">Thanh toán bằng tiền mặt khi nhận hàng</Radio>
+                                        <Radio value="paypal">Thanh toán bằng paypal</Radio>
                                     </WrapperRadio>
                                 </div>
                             </WrapperInfo>
@@ -251,19 +296,42 @@ const PaymentPage = () => {
                                     </span>
                                 </WrapperTotal>
                             </div>
-                            <Buttoncomponent
-                                onClick={() => handleAddOrder()}
-                                size={40}
-                                styleButton={{
-                                    background: 'rgb(255, 57, 69)',
-                                    height: '48px',
-                                    width: '320px',
-                                    border: 'none',
-                                    borderRadius: '4px'
-                                }}
-                                textButton={'Đặt hàng'}
-                                styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '' }}
-                            ></Buttoncomponent>
+                            {payment === 'paypal' && sdkReady ? (
+                                <div style={{ width: '320px' }}>
+                                    <PayPalScriptProvider options={{ "client-id": "your-client-id" }}>
+                                        <PayPalButtons
+                                            style={{ layout: "vertical" }}
+                                            createOrder={(data, actions) => {
+                                                return actions.order.create({
+                                                    purchase_units: [
+                                                        {
+                                                            amount: {
+                                                                value: Math.round(totalPriceMemo / 30000).toString(), // Tổng số tiền dưới dạng chuỗi
+                                                            },
+                                                        },
+                                                    ],
+                                                });
+                                            }}
+                                            onApprove={onSuccessPaypal}
+                                        />
+                                    </PayPalScriptProvider>
+                                </div>
+                            ) : (
+                                <Buttoncomponent
+                                    onClick={() => handleAddOrder()}
+                                    size={40}
+                                    styleButton={{
+                                        background: 'rgb(255, 57, 69)',
+                                        height: '48px',
+                                        width: '320px',
+                                        border: 'none',
+                                        borderRadius: '4px'
+                                    }}
+                                    textButton={'Đặt hàng'}
+                                    styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '' }}
+                                ></Buttoncomponent>
+                            )}
+
                         </WrapperRight>
                     </div>
                 </div>

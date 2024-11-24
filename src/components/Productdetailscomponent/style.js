@@ -51,7 +51,7 @@ span.change-address {
     font-weight: 500;
     }
 `
-export const WrapperQualitytProduct = styled.div`
+export const WrapperQualityProduct = styled.div`
 display: flex;
 gap: 4px;
 align-items: center;

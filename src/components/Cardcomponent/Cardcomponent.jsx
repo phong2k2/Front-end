@@ -16,8 +16,7 @@ const Cardcomponent = (props) => {
             hoverable
             style={{ width: 200, body: { padding: '20px' }, header: { width: '200px', height: '200px' } }}
             cover={<img alt="example" src={image} />}
-            onClick={() => countInStock !== 0 && handleDetailsProduct(id)}
-            disabled={countInStock === 0}
+            onClick={() => handleDetailsProduct(id)}
         >
             <img
                 src={logo}

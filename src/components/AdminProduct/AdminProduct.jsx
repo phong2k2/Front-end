@@ -63,7 +63,7 @@ const AdminProduct = () => {
             return res
         }
     )
-    console.log('rowSelected', rowSelected)
+
     const mutationUpdate = useMutationHooks(
         (data) => {
             const { id,
@@ -175,7 +175,7 @@ const AdminProduct = () => {
         )
     }
 
-    console.log('type', typeProduct)
+
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -291,7 +291,6 @@ const AdminProduct = () => {
                 }
             ],
             onFilter: (value, record) => {
-                console.log('value', { value, record })
                 if (value === '>=') {
                     return record.price >= 300
                 }
@@ -313,7 +312,6 @@ const AdminProduct = () => {
                 }
             ],
             onFilter: (value, record) => {
-                console.log('value', { value, record })
                 if (value === '>=') {
                     return Number(record.rating) >= 3
                 }

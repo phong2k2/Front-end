@@ -35,10 +35,10 @@ const OrderSuccess = () => {
                                     </WrapperValue>
                                 </div>
                             </WrapperInfo>
-                            <WrapperItemOrderInfo>
+                            <WrapperItemOrderInfo style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
                                 {state?.orders?.map((order) => {
                                     return (
-                                        <WrapperItemOrder>
+                                        <WrapperItemOrder key={order?.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', borderBottom: '1px solid #f0f0f0' }}>
                                             <div style={{ width: '600px', display: 'flex', alignItems: 'center', gap: 4 }}>
                                                 <img src={order?.image} style={{ width: '77px', height: '79px', objectFit: 'cover' }} />
                                                 <div style={{

@@ -29,7 +29,6 @@ const Signinpage = () => {
     const { data, isPending, isSuccess } = mutation
 
     useEffect(() => {
-        console.log('location', location)
         if (isSuccess) {
             if (location?.state) {
                 navigate(location?.state)
@@ -51,7 +50,6 @@ const Signinpage = () => {
         dispatch(updateUser({ ...res?.data, access_token: token }))
     }
 
-    console.log('mutation', mutation)
 
     const handleNavigateSignUp = () => {
         navigate('/sign-up')

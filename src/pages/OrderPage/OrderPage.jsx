@@ -34,7 +34,6 @@ const OrderPage = () => {
     const [listChecked, setListChecked] = useState([])
     const dispatch = useDispatch()
     const onChange = (e) => {
-        console.log('checked=${e.target.value}');
         if (listChecked.includes(e.target.value)) {
             const newListChecked = listChecked.filter((item) => item !== e.target.value)
             setListChecked(newListChecked)
@@ -212,7 +211,7 @@ const OrderPage = () => {
 
     return (
         <div style={{ background: '#f5f5fa', width: '100%', height: '100vh' }}>
-            <div style={{ height: '100%', width: '1270px', margin: '0 auto' }}>
+            <div style={{ height: '100%', width: '1270px', margin: '20px auto 0' }}>
                 <h3>Giỏ hàng</h3>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <WrapperLeft>

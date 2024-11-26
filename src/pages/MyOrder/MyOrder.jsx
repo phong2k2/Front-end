@@ -22,7 +22,6 @@ const MyOrderPage = () => {
     // Fetch orders
     const fetchMyOrder = async () => {
         const res = await OrderService.getOrderByUserId(state?.id, state?.token);
-        console.log('res', res)
         return res.data;
     };
 
@@ -104,7 +103,7 @@ const MyOrderPage = () => {
     return (
         <Loading isPending={isPending || mutation.isPending}>
             <WrapperContainer>
-                <div style={{ height: '100%', width: '1270px', margin: '0 auto' }}>
+                <div style={{ height: '100%', width: '1270px', margin: '20px auto 0' }}>
                     <h4>Đơn hàng của tôi</h4>
                     <WrapperListOrder>
                         {data?.map((order) => (

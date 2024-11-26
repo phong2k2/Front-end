@@ -75,7 +75,7 @@ const ProfilePage = () => {
         mutation.mutate({ id: user?.id, email, name, phone, address, avatar, access_token: user?.access_token })
     }
     return (
-        <div style={{ width: '1270px', margin: '0 auto', height: '500px' }}>
+        <div style={{ width: '1270px', margin: '15px auto 0', height: '500px' }}>
             <WrapperHeader>Thông tin người dùng</WrapperHeader>
             <Loading isPending={isPending}>
                 <WrapperContentProfile>

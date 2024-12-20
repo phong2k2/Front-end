@@ -55,7 +55,6 @@ const HomePage = () => {
                     <Slidercomponent arrImages={[slider4, slider1, slider2, slider3]} />
                     <WrapperProducts>
                         {products?.data?.map((product) => {
-                            console.log('product', product)
                             return (
                                 <Cardcomponent
                                     key={product._id}

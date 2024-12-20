@@ -124,7 +124,7 @@ const Signuppge = () => {
                 </WrapperContainerLeft>
                 <WrapperContainerRight>
                     <Image src={imageLogo} preview={false} alt="image-logo" height="203px" width="203px" />
-                    <h4>Mua sắm tại PHONGDEV</h4>
+                    <h4>Mua sắm tại WIND SHOP</h4>
                 </WrapperContainerRight>
             </div>
         </div>
